@@ -1,6 +1,9 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import LoginContext from '../hooks/context/LoginContext';
+import '../App.css';
+import rockGlass from '../images/rockGlass.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Login() {
   const {
@@ -26,8 +29,16 @@ function Login() {
   };
 
   return (
-    <div>
-      <div>Login</div>
+    <div className="meals">
+      <span className="logo">TRYBE</span>
+      <object
+        className="rocksGlass"
+        type="image/svg+xml"
+        data={ rockGlass }
+      >
+        Glass
+      </object>
+
       <form>
         <label
           htmlFor="input-email"

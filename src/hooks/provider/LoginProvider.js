@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
 import LoginContext from '../context/LoginContext';
 
-export default function LoginProvider({ children }) {
+function LoginProvider({ children }) {
   const [emailUser, setEmailUser] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,3 +24,5 @@ export default function LoginProvider({ children }) {
 LoginProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
+export default LoginProvider;

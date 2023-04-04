@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 import SearchBar from './SearchBar';
-// import headerContext from '../hooks/context/headerContext';
+import SearchBarContext from '../hooks/context/SearchBarContext';
 
 function Header({ namePage, isRender }) {
+  const { inputValue, setInputValue } = useContext(SearchBarContext);
   const [showsearchBox, setShowSearchBox] = useState(false);
-  // const [inputValue, setInputValue] = useState('');
 
   const history = useHistory();
   function redirectToProfile() {
@@ -55,8 +55,8 @@ function Header({ namePage, isRender }) {
               data-testid="search-input"
               type="text"
               placeholder="Comece por aqui! Digite sua receita!"
-              // value={ inputValue }
-              // onChange={ ({ target }) => setInputValue(target.value) }
+              value={ inputValue }
+              onChange={ (e) => setInputValue(e.target.value) }
             />
             <SearchBar />
           </div>

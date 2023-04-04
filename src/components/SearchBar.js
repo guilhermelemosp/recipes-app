@@ -1,6 +1,55 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import SearchBarContext from '../hooks/context/SearchBarContext';
+import {
+  getDrinkFirstL,
+  getDrinkIng,
+  getDrinkName,
+  getFirstL,
+  getIngredient,
+  getName,
+} from '../services/fetchApi';
 
 export default function SearchBar() {
+  const { inputValue, radioInput, setRadioInput } = useContext(SearchBarContext);
+
+  const mealsFetch = () => {
+    if (radioInput === 'Ingredient') {
+      getIngredient(inputValue);
+    }
+    if (radioInput === 'Name') {
+      getName(inputValue);
+    }
+    if (radioInput === 'FirstLetter' && inputValue.length > 1) {
+      global.alert('Your search must have only 1 (one) character');
+    } else {
+      getFirstL(inputValue);
+    }
+  };
+
+  const drinksFetch = () => {
+    if (radioInput === 'Ingredient') {
+      getDrinkIng(inputValue);
+    }
+    if (radioInput === 'Name') {
+      getDrinkName(inputValue);
+    }
+    if (radioInput === 'FirstLetter' && inputValue.length > 1) {
+      global.alert('Your search must have only 1 (one) character');
+    } else {
+      getDrinkFirstL(inputValue);
+    }
+  };
+  const history = useHistory();
+  const btnSearch = () => {
+    if (history.location.pathname === '/meals') {
+      mealsFetch();
+    }
+    if (history.location.pathname === '/drinks') {
+      drinksFetch();
+    }
+  };
+
   return (
     <div>
       <label htmlFor="Ingredient">
@@ -9,11 +58,10 @@ export default function SearchBar() {
           id="Ingredient"
           type="radio"
           name="radio"
-          // checked=""
-          // onClick={}
-          // onChange={}
+          value="Ingredient"
+          onChange={ (e) => setRadioInput(e.target.value) }
         />
-        Busca por Ingrediente
+        Ingrediente
       </label>
 
       <label htmlFor="Name">
@@ -22,11 +70,10 @@ export default function SearchBar() {
           id="Name"
           type="radio"
           name="radio"
-          // checked=""
-          // onClick={}
-          // onChange={}
+          value="Name"
+          onChange={ (e) => setRadioInput(e.target.value) }
         />
-        Busca por Nome
+        Nome
       </label>
 
       <label htmlFor="FirstLetter">
@@ -35,18 +82,17 @@ export default function SearchBar() {
           id="FirstLetter"
           type="radio"
           name="radio"
-          // checked=""
-          // onClick={}
-          // onChange={}
+          value="FirstLetter"
+          onChange={ (e) => setRadioInput(e.target.value) }
         />
-        Busca por Primeira Letra
+        Primeira Letra
       </label>
 
       <div>
         <button
           data-testid="exec-search-btn"
           type="button"
-        // onClick={}
+          onClick={ () => btnSearch() }
         >
           Buscar
         </button>

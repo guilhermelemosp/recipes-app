@@ -6,14 +6,17 @@ import * as serviceWorker from './serviceWorker';
 import LoginProvider from './hooks/provider/LoginProvider';
 // import Routes from './routes';
 import App from './App';
+import SearchBarProvider from './hooks/provider/SearchBarProvider';
 
 ReactDOM
   .createRoot(document.getElementById('root'))
   .render(
     <BrowserRouter>
-      <LoginProvider>
-        <App />
-      </LoginProvider>
+      <SearchBarProvider>
+        <LoginProvider>
+          <App />
+        </LoginProvider>
+      </SearchBarProvider>
     </BrowserRouter>,
   );
 

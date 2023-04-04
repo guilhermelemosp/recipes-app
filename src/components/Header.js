@@ -1,18 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
 // import headerContext from '../hooks/context/headerContext';
 
 function Header({ namePage, isRender }) {
+  const history = useHistory();
+  function redirectToProfile() {
+    history.push('/profile');
+  }
+
   return (
     <header>
       <section>
         <div>
-          <img
+          <input
+            type="image"
             src={ profileIcon }
             alt="profile icon"
             data-testid="profile-top-btn"
+            onClick={ redirectToProfile }
           />
         </div>
         <div>

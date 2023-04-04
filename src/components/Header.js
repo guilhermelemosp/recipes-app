@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import profileIcon from '../images/profileIcon.svg';
 import searchIcon from '../images/searchIcon.svg';
-
+import SearchBar from './SearchBar';
 // import headerContext from '../hooks/context/headerContext';
 
 function Header({ namePage, isRender }) {
@@ -58,6 +58,7 @@ function Header({ namePage, isRender }) {
               // value={ inputValue }
               // onChange={ ({ target }) => setInputValue(target.value) }
             />
+            <SearchBar />
           </div>
 
         )}

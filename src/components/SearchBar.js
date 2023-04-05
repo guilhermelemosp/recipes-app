@@ -1,52 +1,36 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import SearchBarContext from '../hooks/context/SearchBarContext';
-import {
-  getDrinkFirstL,
-  getDrinkIng,
-  getDrinkName,
-  getFirstL,
-  getIngredient,
-  getName,
+import { DrinksAPI, MealsAPI,
 } from '../services/fetchApi';
 
 export default function SearchBar() {
-  const { inputValue, radioInput, setRadioInput } = useContext(SearchBarContext);
+  const { inputValue,
+    radioInput,
+    setRadioInput,
+    setRecipe,
+    // setIsApiLoading
+  } = useContext(SearchBarContext);
 
-  const mealsFetch = () => {
-    if (radioInput === 'Ingredient') {
-      getIngredient(inputValue);
-    }
-    if (radioInput === 'Name') {
-      getName(inputValue);
-    }
-    if (radioInput === 'FirstLetter' && inputValue.length > 1) {
-      global.alert('Your search must have only 1 (one) character');
-    } else {
-      getFirstL(inputValue);
-    }
-  };
-
-  const drinksFetch = () => {
-    if (radioInput === 'Ingredient') {
-      getDrinkIng(inputValue);
-    }
-    if (radioInput === 'Name') {
-      getDrinkName(inputValue);
-    }
-    if (radioInput === 'FirstLetter' && inputValue.length > 1) {
-      global.alert('Your search must have only 1 (one) character');
-    } else {
-      getDrinkFirstL(inputValue);
-    }
-  };
   const history = useHistory();
-  const btnSearch = () => {
+  const btnSearch = async () => {
     if (history.location.pathname === '/meals') {
-      mealsFetch();
+      const api = await MealsAPI(radioInput, inputValue);
+      console.log(api);
+      if (api !== 'Error' && api.meals.length === 1) {
+        history.push(`/meals/${api.meals[0].idMeal}`);
+        // setIsApiLoading(true);
+      }
+      setRecipe(api.meals);
     }
     if (history.location.pathname === '/drinks') {
-      drinksFetch();
+      const api = await DrinksAPI(radioInput, inputValue);
+      console.log(api);
+      if (api !== 'Error' && api.drinks.length === 1) {
+        history.push(`/drinks/${api.drinks[0].idDrink}`);
+        // setIsApiLoading(true);
+      }
+      setRecipe(api.drinks);
     }
   };
 

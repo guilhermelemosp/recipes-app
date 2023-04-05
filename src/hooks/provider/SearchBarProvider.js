@@ -4,15 +4,25 @@ import SearchBarContext from '../context/SearchBarContext';
 
 function SearchBarProvider({ children }) {
   const [inputValue, setInputValue] = useState('');
-  const [radioInput, setRadioInput] = useState('');
+  const [radioInput, setRadioInput] = useState({
+    Ingredient: '',
+    FirstLetter: '',
+    Name: '',
+  });
+  const [recipe, setRecipe] = useState([]);
+  const [isApiLoading, setIsApiLoading] = useState(false);
 
   const value = useMemo(() => ({
     radioInput,
     setRadioInput,
     inputValue,
     setInputValue,
+    recipe,
+    setRecipe,
+    isApiLoading,
+    setIsApiLoading,
 
-  }), [radioInput, inputValue]);
+  }), [radioInput, inputValue, isApiLoading, recipe]);
 
   return (
     <SearchBarContext.Provider value={ value }>

@@ -1,5 +1,5 @@
 const termNotFound = 'Term Not Found';
-const noRecipeFound = 'No Recipe Found, sorry :(';
+const noRecipeFound = 'Sorry, we haven\'t found any recipes for these filters.';
 
 export const MealsAPI = async (radioInput, termName) => {
   if (radioInput === 'Ingredient') {

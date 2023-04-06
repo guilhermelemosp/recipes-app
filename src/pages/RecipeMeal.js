@@ -1,7 +1,8 @@
 import React from 'react';
+import RecipeDetails from '../components/RecipeDetails';
 
-export default function RecipeMeal() {
+export default function MealDetails() {
   return (
-    <div><h1>Recipe Meal Details</h1></div>
+    <RecipeDetails />
   );
 }

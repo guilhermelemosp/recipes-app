@@ -1,21 +1,12 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryHistory } from 'history';
 import App from '../App';
-import LoginProvider from '../hooks/provider/LoginProvider';
+import renderWithRouter from './helpers/renderWithRouter';
 
 describe('Testando Footer', () => {
   test('Testando 45% do Footer', async () => {
-    const history = createMemoryHistory();
-    render(
-      <BrowserRouter>
-        <LoginProvider>
-          <App history={ history } />
-        </LoginProvider>
-      </BrowserRouter>,
-    );
+    renderWithRouter(<App />);
 
     const emailInput = screen.getByTestId('email-input');
     const pwdInput = screen.getByTestId('password-input');

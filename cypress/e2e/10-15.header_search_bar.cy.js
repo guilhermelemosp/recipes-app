@@ -245,7 +245,7 @@ describe('14 - Caso a busca retorne mais de uma receita, renderize as 12 primeir
   });
 });
 
-describe.only('15 - Exiba um `alert` caso nenhuma receita seja encontrada', () => {
+describe('15 - Exiba um `alert` caso nenhuma receita seja encontrada', () => {
   it('Caso nenhuma comida seja encontrada o alert deve ser exibido', () => {
     cy.visit('http://localhost:3000/meals', {
       onBeforeLoad(win) {

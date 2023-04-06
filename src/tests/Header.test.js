@@ -7,11 +7,12 @@ import renderWithRouter from './helpers/renderWithRouter';
 import Header from '../components/Header';
 
 describe('Testando Header App Receitas', () => {
+  const searchInput1 = 'search-input';
   test('o funcionamento dos componentes do Header', () => {
     renderWithRouter(<Header />);
 
     const pageTitle = screen.getByTestId('page-title');
-    const searchInput = screen.queryByTestId('search-input');
+    const searchInput = screen.queryByTestId(searchInput1);
     expect(searchInput).toBeNull();
     expect(pageTitle).toBeInTheDocument();
   });
@@ -30,9 +31,21 @@ describe('Testando Header App Receitas', () => {
     const searchTopBtn = screen.getByTestId('search-top-btn');
     expect(searchTopBtn).toBeInTheDocument();
     userEvent.click(searchTopBtn);
-    const searchInput = screen.getByTestId('search-input');
+    const searchInput = screen.getByTestId(searchInput1);
     expect(searchInput).toBeVisible();
     userEvent.click(searchTopBtn);
     expect(searchInput).not.toBeVisible();
+  });
+  test('Se ao escrever no ícone de pesquisa de forma aleatória o campo emite um erro', async () => {
+    renderWithRouter(<App />, '/meals');
+
+    const searchTopBtn = screen.getByTestId('search-top-btn');
+    expect(searchTopBtn).toBeInTheDocument();
+    userEvent.click(searchTopBtn);
+    const searchInput = screen.getByTestId(searchInput1);
+    expect(searchInput).toBeVisible();
+    // userEvent.click(searchInput);
+    userEvent.type(searchInput, 'skldjfsad');
+    // expect(searchInput).toBeVisible();
   });
 });

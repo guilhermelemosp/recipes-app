@@ -16,7 +16,6 @@ export default function SearchBar() {
   const btnSearch = async () => {
     if (history.location.pathname === '/meals') {
       const api = await MealsAPI(radioInput, inputValue);
-      // console.log(api);
       if (api !== 'Error' && api.meals.length === 1) {
         history.push(`/meals/${api.meals[0].idMeal}`);
         // setIsApiLoading(true);
@@ -25,7 +24,6 @@ export default function SearchBar() {
     }
     if (history.location.pathname === '/drinks') {
       const api = await DrinksAPI(radioInput, inputValue);
-      console.log(api);
       if (api !== 'Error' && api.drinks.length === 1) {
         history.push(`/drinks/${api.drinks[0].idDrink}`);
         // setIsApiLoading(true);

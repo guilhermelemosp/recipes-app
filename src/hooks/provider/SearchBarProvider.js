@@ -10,6 +10,8 @@ function SearchBarProvider({ children }) {
     Name: '',
   });
   const [recipe, setRecipe] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [lastFilter, setLastFilter] = useState('');
   const [isApiLoading, setIsApiLoading] = useState(false);
 
   const value = useMemo(() => ({
@@ -21,8 +23,12 @@ function SearchBarProvider({ children }) {
     setRecipe,
     isApiLoading,
     setIsApiLoading,
+    categories,
+    setCategories,
+    lastFilter,
+    setLastFilter,
 
-  }), [radioInput, inputValue, isApiLoading, recipe]);
+  }), [radioInput, inputValue, isApiLoading, recipe, categories, lastFilter]);
 
   return (
     <SearchBarContext.Provider value={ value }>

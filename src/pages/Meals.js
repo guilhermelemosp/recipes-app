@@ -1,11 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SearchBarContext from '../hooks/context/SearchBarContext';
+import { defaultSearch } from '../services/fetchApi';
 
 export default function Meals() {
-  const { recipe } = useContext(SearchBarContext);
+  const { recipe, setRecipe } = useContext(SearchBarContext);
   const twelve = 12;
+
+  useEffect(() => {
+    const getMeals = async () => {
+      const api = await defaultSearch('meals');
+      setRecipe(api.meals);
+    };
+    getMeals();
+  }, []);
 
   return (
     <>

@@ -88,3 +88,13 @@ export const DrinksAPI = async (radioInput, termName) => {
     return requestJson;
   }
 };
+
+export const defaultSearch = async (searchType) => {
+  const url = searchType === 'meals'
+    ? 'https://www.themealdb.com/api/json/v1/1/search.php?s='
+    : 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
+  const recipes = await fetch(url);
+  const requestJson = await recipes.json();
+
+  return requestJson;
+};

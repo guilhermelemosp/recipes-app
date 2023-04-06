@@ -1,17 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SearchBarContext from '../hooks/context/SearchBarContext';
+import { defaultSearch } from '../services/fetchApi';
 
 export default function Drinks() {
-  const { recipe } = useContext(SearchBarContext);
+  const { recipe, setRecipe } = useContext(SearchBarContext);
   const twelve = 12;
+
+  useEffect(() => {
+    const getDrinks = async () => {
+      const api = await defaultSearch();
+      setRecipe(api.drinks);
+    };
+    getDrinks();
+  }, []);
 
   return (
     <>
       <div><Header isRender namePage="Drinks" /></div>
       {recipe ? (
-
         recipe.slice(0, twelve).map((drink, index) => (
           <div
             key={ index }

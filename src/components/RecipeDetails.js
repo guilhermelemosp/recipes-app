@@ -6,6 +6,7 @@ import useFetch from '../services/useFetch';
 import useObjectReduce from '../hooks/useObjectReduce';
 import { drinksRecommends, mealsRecommends } from '../services/fetchApi';
 import 'react-multi-carousel/lib/styles.css';
+import '../index.css';
 
 export default function RecipeDetails() {
   const { pathname } = useLocation();
@@ -129,6 +130,12 @@ export default function RecipeDetails() {
             </div>
           )) }
       </Carousel>
+      <button
+        data-testid="start-recipe-btn"
+        className="btn-start"
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }

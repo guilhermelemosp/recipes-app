@@ -16,3 +16,8 @@ Footer {
   position: fixed;
   bottom: 0;
 }
+.btn-start {
+  position: fixed;
+  width: 100vw;
+  bottom: 0px;
+}

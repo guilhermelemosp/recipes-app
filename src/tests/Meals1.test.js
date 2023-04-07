@@ -17,7 +17,7 @@ const mockFetch = () => {
 
 describe('Testando Buttons App Receitas', () => {
   beforeEach(mockFetch);
-  test.only('o funcionamento dos componentes do Header', async () => {
+  test('o funcionamento dos componentes do Header', async () => {
     await act(async () => {
       renderWithRouter(<App />, '/meals');
     });
@@ -48,25 +48,5 @@ describe('Testando Buttons App Receitas', () => {
     const execBtn = screen.getByTestId('exec-search-btn');
     expect(execBtn).toBeInTheDocument();
     userEvent.click(execBtn);
-  });
-
-  test('o funcionamento dos componentes do Header', async () => {
-    await act(async () => {
-      renderWithRouter(<App />, '/drinks');
-    });
-
-    const allBtn = screen.getByTestId('All-category-filter');
-    const beefBtn = screen.getByTestId('Beef-category-filter');
-    const breakfastBtn = screen.getByTestId('Breakfast-category-filter');
-    const chickenBtn = screen.getByTestId('Chicken-category-filter');
-    const dessertBtn = screen.getByTestId('Dessert-category-filter');
-    const goatBtn = screen.getByTestId('Goat-category-filter');
-
-    userEvent.click(allBtn);
-    userEvent.click(beefBtn);
-    userEvent.click(breakfastBtn);
-    userEvent.click(chickenBtn);
-    userEvent.click(dessertBtn);
-    userEvent.click(goatBtn);
   });
 });

@@ -118,3 +118,15 @@ export const filterByCategory = async (category, searchType) => {
 
   return requestJson;
 };
+
+export const drinksRecommends = async () => {
+  const drinks = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+  const requestJson = await drinks.json();
+  return requestJson;
+};
+
+export const mealsRecommends = async () => {
+  const meals = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+  const requestJson = await meals.json();
+  return requestJson;
+};

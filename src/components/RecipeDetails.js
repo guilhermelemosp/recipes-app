@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import Carousel from 'react-multi-carousel';
 import useFetch from '../services/useFetch';
@@ -7,15 +7,17 @@ import useObjectReduce from '../hooks/useObjectReduce';
 import { drinksRecommends, mealsRecommends } from '../services/fetchApi';
 import 'react-multi-carousel/lib/styles.css';
 import '../index.css';
+import SearchBarContext from '../hooks/context/SearchBarContext';
 
 export default function RecipeDetails() {
+  const history = useHistory();
   const { pathname } = useLocation();
   const { id } = useParams();
   const meals = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   const drink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const url = (pathname.includes('meals')) ? meals : drink;
 
-  const [specificFood, setSpecificFood] = useState([]);
+  const { specificFood, setSpecificFood } = useContext(SearchBarContext);
   const [recommendMeals, setRecommendMeals] = useState([]);
   const [recommendDrinks, setRecommendDrinks] = useState([]);
   const ingredient = useObjectReduce(specificFood, 'Ingredient');
@@ -55,17 +57,12 @@ export default function RecipeDetails() {
   };
 
   const btnStart = () => {
-    localStorage.setItem('doneRecipes', JSON.stringify([{
-      id: specificFood[0].idMeal || specificFood[0].idDrink,
-      type: !specificFood[0].strYoutube ? 'drink' : 'meal',
-      nationality: specificFood[0].strArea,
-      category: specificFood[0].strCategory,
-      alcoholicOrNot: specificFood[0].strAlcoholic,
-      name: specificFood[0].strMeal || specificFood[0].srtDrink,
-      image: specificFood[0].strMealThumb || specificFood[0].strDrinkThumb,
-      doneDate: Date(),
-      tags: specificFood[0].strTags ? specificFood[0].strTags : [],
-    }]));
+    if (pathname.includes('meals')) {
+      history.push(`/meals/${specificFood[0].idMeal}/in-progress`);
+    }
+    if (pathname.includes('drinks')) {
+      history.push(`/drinks/${specificFood[0].idDrink}/in-progress`);
+    }
   };
 
   return (
@@ -141,6 +138,20 @@ export default function RecipeDetails() {
             </div>
           )) }
       </Carousel>
+      <div>
+        <button
+          data-testid="share-btn"
+        >
+          Compartilhar
+        </button>
+        <button
+          data-testid="favorite-btn"
+        >
+          Favoritar
+        </button>
+      </div>
+      <br />
+      <br />
       <button
         data-testid="start-recipe-btn"
         className="btn-start"

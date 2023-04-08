@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import '../index.css';
 import { useLocation, useParams } from 'react-router-dom';
 import SearchBarContext from '../hooks/context/SearchBarContext';

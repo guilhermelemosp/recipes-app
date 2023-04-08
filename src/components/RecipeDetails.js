@@ -54,8 +54,19 @@ export default function RecipeDetails() {
     },
   };
 
-  console.log(recommendDrinks);
-  console.log(recommendMeals);
+  const btnStart = () => {
+    localStorage.setItem('doneRecipes', JSON.stringify([{
+      id: specificFood[0].idMeal || specificFood[0].idDrink,
+      type: !specificFood[0].strYoutube ? 'drink' : 'meal',
+      nationality: specificFood[0].strArea,
+      category: specificFood[0].strCategory,
+      alcoholicOrNot: specificFood[0].strAlcoholic,
+      name: specificFood[0].strMeal || specificFood[0].srtDrink,
+      image: specificFood[0].strMealThumb || specificFood[0].strDrinkThumb,
+      doneDate: Date(),
+      tags: specificFood[0].strTags ? specificFood[0].strTags : [],
+    }]));
+  };
 
   return (
     <div>
@@ -133,6 +144,7 @@ export default function RecipeDetails() {
       <button
         data-testid="start-recipe-btn"
         className="btn-start"
+        onClick={ () => btnStart() }
       >
         Start Recipe
       </button>

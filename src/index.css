@@ -16,8 +16,13 @@ Footer {
   position: fixed;
   bottom: 0;
 }
+
 .btn-start {
   position: fixed;
   width: 100vw;
   bottom: 0px;
+}
+
+label:has(:checked) {
+  text-decoration: line-through solid rgb(0, 0, 0)
 }

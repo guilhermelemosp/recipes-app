@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import Carousel from 'react-multi-carousel';
+import clipboardCopy from 'clipboard-copy';
 import useFetch from '../services/useFetch';
 import useObjectReduce from '../hooks/useObjectReduce';
 import { drinksRecommends, mealsRecommends } from '../services/fetchApi';
 import 'react-multi-carousel/lib/styles.css';
 import '../index.css';
-import SearchBarContext from '../hooks/context/SearchBarContext';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -20,26 +20,16 @@ export default function RecipeDetails() {
   const meals = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   const drink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const url = (pathname.includes('meals')) ? meals : drink;
-
-  const { specificFood, setSpecificFood } = useContext(SearchBarContext);
+  const [specificFood, setSpecificFood] = useState([]);
   const [recommendMeals, setRecommendMeals] = useState([]);
   const [recommendDrinks, setRecommendDrinks] = useState([]);
   const [copied, setCopied] = useState(false);
-  const [arrayFav, setArrayFav] = useState(false);
+  const [arrayFav, setArrayFav] = useState([]);
   const [heart, setHeart] = useState(false);
   const ingredient = useObjectReduce(specificFood, 'Ingredient');
   const measure = useObjectReduce(specificFood, 'strMeasure');
   const { fetchFood } = useFetch(setSpecificFood, url);
   const six = 6;
-
-  useEffect(() => {
-    fetchFood();
-  }, []);
-
-  useEffect(() => {
-    ingredient.filterObjectKeys();
-    measure.filterObjectKeys();
-  }, [specificFood]);
 
   const recommendAPI = async () => {
     if (pathname.includes('meals')) {
@@ -53,10 +43,16 @@ export default function RecipeDetails() {
   };
 
   useEffect(() => {
-    recommendAPI();
+    fetchFood();
   }, []);
 
   useEffect(() => {
+    ingredient.filterObjectKeys();
+    measure.filterObjectKeys();
+  }, [specificFood]);
+
+  useEffect(() => {
+    recommendAPI();
     const favArray = getFavorite();
     setArrayFav(favArray);
   }, []);
@@ -100,25 +96,26 @@ export default function RecipeDetails() {
       }
     }
   };
-
-  // useEffect(() => {
-  //   if (pathname.includes('drinks')) {
-  //     if (arrayFav.some((fav) => (fav
-  //       .id === specificFood[0].idDrink))) {
-  //       setHeart(false);
-  //     } else {
-  //       setHeart(true);
-  //     }
-  //   }
-  //   if (pathname.includes('meals')) {
-  //     if (arrayFav.some((fav) => (fav
-  //       .id === specificFood[0].idMeal))) {
-  //       setHeart(false);
-  //     } else {
-  //       setHeart(true);
-  //     }
-  //   }
-  // }, []);
+  console.log(heart);
+  useEffect(() => {
+    if (pathname.includes('drinks')) {
+      if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
+        .id === id))) {
+        setHeart(true);
+        console.log(heart);
+      } else {
+        setHeart(false);
+      }
+    }
+    if (pathname.includes('meals')) {
+      if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
+        .id === id))) {
+        setHeart(true);
+      } else {
+        setHeart(false);
+      }
+    }
+  }, []);
 
   const saveFavBtn = () => {
     favOnOff();
@@ -127,9 +124,8 @@ export default function RecipeDetails() {
     console.log(arrayFav);
   };
 
-  const copy = require('clipboard-copy');
   const shareBtn = () => {
-    copy(`localhost:3000${history.location.pathname}`);
+    clipboardCopy(window.location.href);
     setCopied(true);
   };
 

@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../index.css';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import SearchBarContext from '../hooks/context/SearchBarContext';
+import clipboardCopy from 'clipboard-copy';
 import useObjectReduce from '../hooks/useObjectReduce';
 import useFetch from '../services/useFetch';
 import shareIcon from '../images/shareIcon.svg';
@@ -10,7 +10,7 @@ import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
 
 function RecipeInProgress() {
-  const { specificFood, setSpecificFood } = useContext(SearchBarContext);
+  const [specificFood, setSpecificFood] = useState([]);
   const ingredient = useObjectReduce(specificFood, 'Ingredient');
   const measure = useObjectReduce(specificFood, 'strMeasure');
   const history = useHistory();
@@ -20,13 +20,9 @@ function RecipeInProgress() {
   const drink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const url = (pathname.includes('meals')) ? meals : drink;
   const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = today.getMonth() + 1;
-  const dd = today.getDate();
-  const formattedToday = `${dd}/${mm}/${yyyy}`;
   // const [checkbox, setCheckbox] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [arrayFav, setArrayFav] = useState(false);
+  const [arrayFav, setArrayFav] = useState([]);
   const [heart, setHeart] = useState(false);
   const [disable, setDisable] = useState(true);
   const { fetchFood } = useFetch(setSpecificFood, url);
@@ -63,6 +59,7 @@ function RecipeInProgress() {
   };
 
   const savesRecipes = () => {
+    const re = /\s*,\s*/;
     const storageRecipes = getSavedRecipes();
     const saveRecipes = [...storageRecipes, {
       id: specificFood[0].idMeal || specificFood[0].idDrink,
@@ -70,12 +67,13 @@ function RecipeInProgress() {
       name: specificFood[0].strMeal || specificFood[0].strDrink,
       category: specificFood[0].strCategory,
       image: specificFood[0].strMealThumb || specificFood[0].strDrinkThumb,
-      tags: specificFood[0].strTags ? specificFood[0].strTags : [],
+      tags: specificFood[0].strTags ? (specificFood[0].strTags).split(re) : [],
       alcoholicOrNot: specificFood[0].strAlcoholic ? specificFood[0].strAlcoholic : '',
       type: !specificFood[0].strYoutube ? 'drink' : 'meal',
-      doneDate: formattedToday,
+      doneDate: today.toISOString(),
     }];
     localStorage.setItem('doneRecipes', JSON.stringify(saveRecipes));
+    console.log(localStorage.getItem('doneRecipes'));
   };
 
   const favOnOff = () => {
@@ -102,6 +100,26 @@ function RecipeInProgress() {
     }
   };
 
+  useEffect(() => {
+    if (pathname.includes('drinks')) {
+      if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
+        .id === id))) {
+        setHeart(true);
+        console.log(heart);
+      } else {
+        setHeart(false);
+      }
+    }
+    if (pathname.includes('meals')) {
+      if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
+        .id === id))) {
+        setHeart(true);
+      } else {
+        setHeart(false);
+      }
+    }
+  }, []);
+
   console.log(arrayFav);
   const saveFavBtn = () => {
     favOnOff();
@@ -110,9 +128,8 @@ function RecipeInProgress() {
     console.log(arrayFav);
   };
 
-  const copy = require('clipboard-copy');
   const shareBtn = () => {
-    copy(`localhost:3000${history.location.pathname}`);
+    clipboardCopy(window.location.href);
     setCopied(true);
   };
 

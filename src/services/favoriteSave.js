@@ -13,15 +13,17 @@ export const getFavorite = () => {
 export const addFav = (fav) => {
   if (fav) {
     const favoriteSongs = readFavorite();
+    console.log(fav);
     saveFavorite([...favoriteSongs, {
       id: fav[0].idMeal || fav[0].idDrink,
       type: !fav[0].strYoutube ? 'drink' : 'meal',
-      nationality: fav[0].strArea,
+      nationality: fav[0].strArea ? fav[0].strArea : '',
       category: fav[0].strCategory,
       alcoholicOrNot: fav[0].strAlcoholic ? fav[0].strAlcoholic : '',
-      name: fav[0].strMeal || fav[0].srtDrink,
+      name: fav[0].strMeal || fav[0].strDrink,
       image: fav[0].strMealThumb || fav[0].strDrinkThumb,
     }]);
+    console.log(readFavorite());
   }
 };
 

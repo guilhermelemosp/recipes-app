@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../index.css';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import clipboardCopy from 'clipboard-copy';
 import useObjectReduce from '../hooks/useObjectReduce';
@@ -120,7 +119,6 @@ function RecipeInProgress() {
     }
   }, []);
 
-  console.log(arrayFav);
   const saveFavBtn = () => {
     favOnOff();
     const arrayFav2 = getFavorite();
@@ -129,7 +127,7 @@ function RecipeInProgress() {
   };
 
   const shareBtn = () => {
-    clipboardCopy(window.location.href);
+    clipboardCopy((window.location.href).replaceAll('/in-progress', ''));
     setCopied(true);
   };
 
@@ -163,6 +161,7 @@ function RecipeInProgress() {
                 htmlFor={ `ingredient-${index}` }
               >
                 <input
+                  data-testid={ `${index}-ingredient-box` }
                   className="box"
                   type="checkbox"
                   id={ `ingredient-${index}` }
@@ -187,25 +186,26 @@ function RecipeInProgress() {
           />
         </button>
         <button
-          data-testid="favorite-btn"
           onClick={ () => saveFavBtn() }
         >
           { heart
             ? (
               <img
+                data-testid="favorite-btn"
                 src={ blackHeartIcon }
                 alt="blackHeartIcon.svg"
               />
             )
             : (
               <img
+                data-testid="favorite-btn"
                 src={ whiteHeartIcon }
                 alt="whiteHeartIcon.svg"
               />
             )}
         </button>
       </div>
-      { copied && <span>Link copied!</span>}
+      { copied && <span data-testid="copy">Link copied!</span>}
       <br />
       <br />
       <button

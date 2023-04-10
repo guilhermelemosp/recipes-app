@@ -34,39 +34,40 @@ export default function SearchBar() {
 
   return (
     <div>
+
+      <input
+        data-testid="ingredient-search-radio"
+        id="Ingredient"
+        type="radio"
+        name="radio"
+        value="Ingredient"
+        onChange={ (e) => setRadioInput(e.target.value) }
+      />
       <label htmlFor="Ingredient">
-        <input
-          data-testid="ingredient-search-radio"
-          id="Ingredient"
-          type="radio"
-          name="radio"
-          value="Ingredient"
-          onChange={ (e) => setRadioInput(e.target.value) }
-        />
         Ingrediente
       </label>
 
+      <input
+        data-testid="name-search-radio"
+        id="Name"
+        type="radio"
+        name="radio"
+        value="Name"
+        onChange={ (e) => setRadioInput(e.target.value) }
+      />
       <label htmlFor="Name">
-        <input
-          data-testid="name-search-radio"
-          id="Name"
-          type="radio"
-          name="radio"
-          value="Name"
-          onChange={ (e) => setRadioInput(e.target.value) }
-        />
         Nome
       </label>
 
+      <input
+        data-testid="first-letter-search-radio"
+        id="FirstLetter"
+        type="radio"
+        name="radio"
+        value="FirstLetter"
+        onChange={ (e) => setRadioInput(e.target.value) }
+      />
       <label htmlFor="FirstLetter">
-        <input
-          data-testid="first-letter-search-radio"
-          id="FirstLetter"
-          type="radio"
-          name="radio"
-          value="FirstLetter"
-          onChange={ (e) => setRadioInput(e.target.value) }
-        />
         Primeira Letra
       </label>
 

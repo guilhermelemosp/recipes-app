@@ -84,7 +84,6 @@ export default function RecipeDetails() {
         setHeart(true);
       }
     }
-
     if (pathname.includes('meals')) {
       if (arrayFav.some((fav) => (fav
         .id === specificFood[0].idMeal))) {
@@ -102,7 +101,6 @@ export default function RecipeDetails() {
       if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
         .id === id))) {
         setHeart(true);
-        console.log(heart);
       } else {
         setHeart(false);
       }
@@ -153,10 +151,14 @@ export default function RecipeDetails() {
               { `${qntt} ${ingredient.results[index]}` }
             </p>
           ))}
-          {' '}
           <p data-testid="instructions">{ food.strInstructions }</p>
           { !food.strYoutube ? '' : (
-            <ReactPlayer url={ food.strYoutube } data-testid="video" />
+            <ReactPlayer
+              width={ 340 }
+              height={ 200 }
+              url={ food.strYoutube }
+              data-testid="video"
+            />
           )}
         </div>
       ))}
@@ -179,7 +181,6 @@ export default function RecipeDetails() {
                 data-testid={ `${index}-recommendation-title` }
               >
                 {drinks.strDrink}
-
               </div>
             </div>
           )) : recommendMeals.slice(0, six).map((meal, index) => (
@@ -191,13 +192,11 @@ export default function RecipeDetails() {
                 src={ meal.strMealThumb }
                 alt={ meal.srtMeal }
                 width={ 200 }
-
               />
               <div
                 data-testid={ `${index}-recommendation-title` }
               >
                 {meal.strMeal}
-
               </div>
             </div>
           )) }
@@ -207,10 +206,7 @@ export default function RecipeDetails() {
           data-testid="share-btn"
           onClick={ () => shareBtn() }
         >
-          <img
-            src={ shareIcon }
-            alt="shareIcon.svg"
-          />
+          <img src={ shareIcon } alt="shareIcon.svg" />
         </button>
         <button
           data-testid="favorite-btn"
@@ -218,16 +214,10 @@ export default function RecipeDetails() {
         >
           { heart
             ? (
-              <img
-                src={ blackHeartIcon }
-                alt="blackHeartIcon.svg"
-              />
+              <img src={ blackHeartIcon } alt="blackHeartIcon.svg" />
             )
             : (
-              <img
-                src={ whiteHeartIcon }
-                alt="whiteHeartIcon.svg"
-              />
+              <img src={ whiteHeartIcon } alt="whiteHeartIcon.svg" />
             )}
         </button>
       </div>

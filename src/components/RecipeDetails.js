@@ -209,15 +209,22 @@ export default function RecipeDetails() {
           <img src={ shareIcon } alt="shareIcon.svg" />
         </button>
         <button
-          data-testid="favorite-btn"
           onClick={ () => saveFavBtn() }
         >
           { heart
             ? (
-              <img src={ blackHeartIcon } alt="blackHeartIcon.svg" />
+              <img
+                data-testid="favorite-btn"
+                src={ blackHeartIcon }
+                alt="blackHeartIcon.svg"
+              />
             )
             : (
-              <img src={ whiteHeartIcon } alt="whiteHeartIcon.svg" />
+              <img
+                data-testid="favorite-btn"
+                src={ whiteHeartIcon }
+                alt="whiteHeartIcon.svg"
+              />
             )}
         </button>
       </div>

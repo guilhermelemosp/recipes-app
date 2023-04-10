@@ -8,6 +8,10 @@ import { drinksRecommends, mealsRecommends } from '../services/fetchApi';
 import 'react-multi-carousel/lib/styles.css';
 import '../index.css';
 import SearchBarContext from '../hooks/context/SearchBarContext';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
 
 export default function RecipeDetails() {
   const history = useHistory();
@@ -20,6 +24,9 @@ export default function RecipeDetails() {
   const { specificFood, setSpecificFood } = useContext(SearchBarContext);
   const [recommendMeals, setRecommendMeals] = useState([]);
   const [recommendDrinks, setRecommendDrinks] = useState([]);
+  const [copied, setCopied] = useState(false);
+  const [arrayFav, setArrayFav] = useState(false);
+  const [heart, setHeart] = useState(false);
   const ingredient = useObjectReduce(specificFood, 'Ingredient');
   const measure = useObjectReduce(specificFood, 'strMeasure');
   const { fetchFood } = useFetch(setSpecificFood, url);
@@ -49,6 +56,11 @@ export default function RecipeDetails() {
     recommendAPI();
   }, []);
 
+  useEffect(() => {
+    const favArray = getFavorite();
+    setArrayFav(favArray);
+  }, []);
+
   const responsive = {
     mobile: {
       breakpoint: { max: 464, min: 0 },
@@ -63,6 +75,62 @@ export default function RecipeDetails() {
     if (pathname.includes('drinks')) {
       history.push(`/drinks/${specificFood[0].idDrink}/in-progress`);
     }
+  };
+
+  const favOnOff = () => {
+    if (pathname.includes('drinks')) {
+      if (arrayFav.some((fav) => (fav
+        .id === specificFood[0].idDrink))) {
+        removeFavD(specificFood);
+        setHeart(false);
+      } else {
+        addFav(specificFood);
+        setHeart(true);
+      }
+    }
+
+    if (pathname.includes('meals')) {
+      if (arrayFav.some((fav) => (fav
+        .id === specificFood[0].idMeal))) {
+        removeFavM(specificFood);
+        setHeart(false);
+      } else {
+        addFav(specificFood);
+        setHeart(true);
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   if (pathname.includes('drinks')) {
+  //     if (arrayFav.some((fav) => (fav
+  //       .id === specificFood[0].idDrink))) {
+  //       setHeart(false);
+  //     } else {
+  //       setHeart(true);
+  //     }
+  //   }
+  //   if (pathname.includes('meals')) {
+  //     if (arrayFav.some((fav) => (fav
+  //       .id === specificFood[0].idMeal))) {
+  //       setHeart(false);
+  //     } else {
+  //       setHeart(true);
+  //     }
+  //   }
+  // }, []);
+
+  const saveFavBtn = () => {
+    favOnOff();
+    const arrayFav2 = getFavorite();
+    setArrayFav(arrayFav2);
+    console.log(arrayFav);
+  };
+
+  const copy = require('clipboard-copy');
+  const shareBtn = () => {
+    copy(`localhost:3000${history.location.pathname}`);
+    setCopied(true);
   };
 
   return (
@@ -141,15 +209,33 @@ export default function RecipeDetails() {
       <div>
         <button
           data-testid="share-btn"
+          onClick={ () => shareBtn() }
         >
-          Compartilhar
+          <img
+            src={ shareIcon }
+            alt="shareIcon.svg"
+          />
         </button>
         <button
           data-testid="favorite-btn"
+          onClick={ () => saveFavBtn() }
         >
-          Favoritar
+          { heart
+            ? (
+              <img
+                src={ blackHeartIcon }
+                alt="blackHeartIcon.svg"
+              />
+            )
+            : (
+              <img
+                src={ whiteHeartIcon }
+                alt="whiteHeartIcon.svg"
+              />
+            )}
         </button>
       </div>
+      { copied && <span>Link copied!</span>}
       <br />
       <br />
       <button

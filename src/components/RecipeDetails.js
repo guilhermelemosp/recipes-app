@@ -1,13 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import Carousel from 'react-multi-carousel';
+import clipboardCopy from 'clipboard-copy';
 import useFetch from '../services/useFetch';
 import useObjectReduce from '../hooks/useObjectReduce';
 import { drinksRecommends, mealsRecommends } from '../services/fetchApi';
 import 'react-multi-carousel/lib/styles.css';
 import '../index.css';
-import SearchBarContext from '../hooks/context/SearchBarContext';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
 
 export default function RecipeDetails() {
   const history = useHistory();
@@ -16,23 +20,16 @@ export default function RecipeDetails() {
   const meals = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   const drink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const url = (pathname.includes('meals')) ? meals : drink;
-
-  const { specificFood, setSpecificFood } = useContext(SearchBarContext);
+  const [specificFood, setSpecificFood] = useState([]);
   const [recommendMeals, setRecommendMeals] = useState([]);
   const [recommendDrinks, setRecommendDrinks] = useState([]);
+  const [copied, setCopied] = useState(false);
+  const [arrayFav, setArrayFav] = useState([]);
+  const [heart, setHeart] = useState(false);
   const ingredient = useObjectReduce(specificFood, 'Ingredient');
   const measure = useObjectReduce(specificFood, 'strMeasure');
   const { fetchFood } = useFetch(setSpecificFood, url);
   const six = 6;
-
-  useEffect(() => {
-    fetchFood();
-  }, []);
-
-  useEffect(() => {
-    ingredient.filterObjectKeys();
-    measure.filterObjectKeys();
-  }, [specificFood]);
 
   const recommendAPI = async () => {
     if (pathname.includes('meals')) {
@@ -46,7 +43,18 @@ export default function RecipeDetails() {
   };
 
   useEffect(() => {
+    fetchFood();
+  }, []);
+
+  useEffect(() => {
+    ingredient.filterObjectKeys();
+    measure.filterObjectKeys();
+  }, [specificFood]);
+
+  useEffect(() => {
     recommendAPI();
+    const favArray = getFavorite();
+    setArrayFav(favArray);
   }, []);
 
   const responsive = {
@@ -63,6 +71,62 @@ export default function RecipeDetails() {
     if (pathname.includes('drinks')) {
       history.push(`/drinks/${specificFood[0].idDrink}/in-progress`);
     }
+  };
+
+  const favOnOff = () => {
+    if (pathname.includes('drinks')) {
+      if (arrayFav.some((fav) => (fav
+        .id === specificFood[0].idDrink))) {
+        removeFavD(specificFood);
+        setHeart(false);
+      } else {
+        addFav(specificFood);
+        setHeart(true);
+      }
+    }
+
+    if (pathname.includes('meals')) {
+      if (arrayFav.some((fav) => (fav
+        .id === specificFood[0].idMeal))) {
+        removeFavM(specificFood);
+        setHeart(false);
+      } else {
+        addFav(specificFood);
+        setHeart(true);
+      }
+    }
+  };
+  console.log(heart);
+  useEffect(() => {
+    if (pathname.includes('drinks')) {
+      if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
+        .id === id))) {
+        setHeart(true);
+        console.log(heart);
+      } else {
+        setHeart(false);
+      }
+    }
+    if (pathname.includes('meals')) {
+      if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
+        .id === id))) {
+        setHeart(true);
+      } else {
+        setHeart(false);
+      }
+    }
+  }, []);
+
+  const saveFavBtn = () => {
+    favOnOff();
+    const arrayFav2 = getFavorite();
+    setArrayFav(arrayFav2);
+    console.log(arrayFav);
+  };
+
+  const shareBtn = () => {
+    clipboardCopy(window.location.href);
+    setCopied(true);
   };
 
   return (
@@ -141,15 +205,33 @@ export default function RecipeDetails() {
       <div>
         <button
           data-testid="share-btn"
+          onClick={ () => shareBtn() }
         >
-          Compartilhar
+          <img
+            src={ shareIcon }
+            alt="shareIcon.svg"
+          />
         </button>
         <button
           data-testid="favorite-btn"
+          onClick={ () => saveFavBtn() }
         >
-          Favoritar
+          { heart
+            ? (
+              <img
+                src={ blackHeartIcon }
+                alt="blackHeartIcon.svg"
+              />
+            )
+            : (
+              <img
+                src={ whiteHeartIcon }
+                alt="whiteHeartIcon.svg"
+              />
+            )}
         </button>
       </div>
+      { copied && <span>Link copied!</span>}
       <br />
       <br />
       <button

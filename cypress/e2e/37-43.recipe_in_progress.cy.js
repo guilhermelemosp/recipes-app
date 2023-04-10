@@ -154,7 +154,7 @@ describe('40 - Salve o estado do progresso, que deve ser mantido caso a pessoa a
   });
 });
 
-describe.only('41 - Desenvolva a lógica de favoritar e compartilhar. A lógica da tela de detalhes de uma receita se aplica aqui', () => {
+describe('41 - Desenvolva a lógica de favoritar e compartilhar. A lógica da tela de detalhes de uma receita se aplica aqui', () => {
   it('verifica se os botões estão disponíveis na tela de detalhes de uma comida', () => {
     cy.visit('http://localhost:3000/meals/52771/in-progress', {
       onBeforeLoad(win) {
@@ -504,7 +504,7 @@ describe('42 - Implemente a solução de modo que o botão de finalizar receita 
   });
 });
 
-describe('43 - Redirecione a pessoa usuária após clicar no botão de finalizar receita (\"Finish Recipe\"), para a página de receitas feitas, cuja rota deve ser `/done-recipes`', () => {
+describe.only('43 - Redirecione a pessoa usuária após clicar no botão de finalizar receita (\"Finish Recipe\"), para a página de receitas feitas, cuja rota deve ser `/done-recipes`', () => {
   it('adiciona a comida feita no localStorage', () => {
     cy.visit('http://localhost:3000/meals/52771/in-progress', {
       onBeforeLoad(win) {

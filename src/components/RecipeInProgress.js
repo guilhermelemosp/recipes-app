@@ -129,7 +129,7 @@ function RecipeInProgress() {
   };
 
   const shareBtn = () => {
-    clipboardCopy(window.location.href);
+    clipboardCopy((window.location.href).replaceAll('/in-progress', ''));
     setCopied(true);
   };
 
@@ -187,18 +187,19 @@ function RecipeInProgress() {
           />
         </button>
         <button
-          data-testid="favorite-btn"
           onClick={ () => saveFavBtn() }
         >
           { heart
             ? (
               <img
+                data-testid="favorite-btn"
                 src={ blackHeartIcon }
                 alt="blackHeartIcon.svg"
               />
             )
             : (
               <img
+                data-testid="favorite-btn"
                 src={ whiteHeartIcon }
                 alt="whiteHeartIcon.svg"
               />

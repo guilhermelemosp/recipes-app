@@ -23,6 +23,6 @@ Footer {
   bottom: 0px;
 }
 
-label:has(:checked) {
+/* label:has(:checked) {
   text-decoration: line-through solid rgb(0, 0, 0)
-}
+} */

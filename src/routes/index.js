@@ -7,8 +7,8 @@ import RecipeMeal from '../pages/RecipeMeal';
 import RecipeDrink from '../pages/RecipeDrink';
 import MealsRecipesInProgress from '../pages/MealsRecipesInProgress';
 import DrinksRecipesInProgress from '../pages/DrinksRecipesInProgress';
-import Profile from '../pages/Profile';
-import FavoriteRecipes from '../pages/FavoriteRecipes';
+import Profile from '../pages/ProfilePage';
+import FavoritePage from '../pages/FavoritePage';
 import DoneRecipes from '../pages/DoneRecipes';
 
 function Routes() {
@@ -58,7 +58,7 @@ function Routes() {
         <Route
           exact
           path="/favorite-recipes"
-          component={ FavoriteRecipes }
+          component={ FavoritePage }
         />
         <Route
           exact

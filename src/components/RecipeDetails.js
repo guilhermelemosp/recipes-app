@@ -12,6 +12,7 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
+import { addContinue, getContinue, getSavedRecipes } from '../services/continueRecipes';
 
 export default function RecipeDetails() {
   const history = useHistory();
@@ -30,6 +31,8 @@ export default function RecipeDetails() {
   const measure = useObjectReduce(specificFood, 'strMeasure');
   const { fetchFood } = useFetch(setSpecificFood, url);
   const six = 6;
+  const [startBtn, setStartBtn] = useState(true);
+  const [startOn, setStartOn] = useState(true);
 
   const recommendAPI = async () => {
     if (pathname.includes('meals')) {
@@ -53,6 +56,8 @@ export default function RecipeDetails() {
 
   useEffect(() => {
     recommendAPI();
+    getContinue();
+    getSavedRecipes();
     const favArray = getFavorite();
     setArrayFav(favArray);
   }, []);
@@ -63,15 +68,33 @@ export default function RecipeDetails() {
       items: 2,
     },
   };
-
+  console.log(JSON.parse(localStorage.getItem('continueRecipes')));
   const btnStart = () => {
+    addContinue(id);
     if (pathname.includes('meals')) {
       history.push(`/meals/${specificFood[0].idMeal}/in-progress`);
     }
     if (pathname.includes('drinks')) {
       history.push(`/drinks/${specificFood[0].idDrink}/in-progress`);
     }
+    setStartBtn(false);
   };
+
+  const checkContinue = () => {
+    const continueArray = JSON.parse(localStorage.getItem('continueRecipes'));
+    const trueFalse = continueArray.some((item) => item.idPage === id);
+    if (trueFalse) { setStartBtn(false); }
+  };
+  const onStartBtn = () => {
+    const continueArray = JSON.parse(localStorage.getItem('doneRecipes'));
+    const trueFalse = continueArray.some((item) => item.id === id);
+    if (trueFalse) { setStartOn(false); }
+    console.log('teste loop');
+  };
+  useEffect(() => {
+    checkContinue();
+    onStartBtn();
+  }, []);
 
   const favOnOff = () => {
     if (pathname.includes('drinks')) {
@@ -95,7 +118,6 @@ export default function RecipeDetails() {
       }
     }
   };
-  console.log(heart);
   useEffect(() => {
     if (pathname.includes('drinks')) {
       if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
@@ -132,9 +154,7 @@ export default function RecipeDetails() {
       { specificFood?.map((food) => (
         <div key={ food.strMeal || food.strDrink }>
           <p data-testid="recipe-title">{ food.strMeal || food.strDrink }</p>
-          <h3
-            data-testid="recipe-category"
-          >
+          <h3 data-testid="recipe-category">
             { pathname.includes('meals') ? food.strCategory : food.strAlcoholic }
           </h3>
           <img
@@ -144,10 +164,7 @@ export default function RecipeDetails() {
             style={ { maxWidth: 200 } }
           />
           {measure.results?.map((qntt, index) => (
-            <p
-              key={ index }
-              data-testid={ `${index}-ingredient-name-and-measure` }
-            >
+            <p key={ index } data-testid={ `${index}-ingredient-name-and-measure` }>
               { `${qntt} ${ingredient.results[index]}` }
             </p>
           ))}
@@ -162,40 +179,27 @@ export default function RecipeDetails() {
           )}
         </div>
       ))}
-      <Carousel
-        responsive={ responsive }
-        swipeable
-      >
+      <Carousel responsive={ responsive } swipeable>
         { pathname.includes('meals')
           ? recommendDrinks.slice(0, six).map((drinks, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
+            <div key={ index } data-testid={ `${index}-recommendation-card` }>
               <img
                 src={ drinks.strDrinkThumb }
                 alt={ drinks.srtDrink }
                 width={ 200 }
               />
-              <div
-                data-testid={ `${index}-recommendation-title` }
-              >
+              <div data-testid={ `${index}-recommendation-title` }>
                 {drinks.strDrink}
               </div>
             </div>
           )) : recommendMeals.slice(0, six).map((meal, index) => (
-            <div
-              key={ index }
-              data-testid={ `${index}-recommendation-card` }
-            >
+            <div key={ index } data-testid={ `${index}-recommendation-card` }>
               <img
                 src={ meal.strMealThumb }
                 alt={ meal.srtMeal }
                 width={ 200 }
               />
-              <div
-                data-testid={ `${index}-recommendation-title` }
-              >
+              <div data-testid={ `${index}-recommendation-title` }>
                 {meal.strMeal}
               </div>
             </div>
@@ -231,13 +235,15 @@ export default function RecipeDetails() {
       { copied && <span>Link copied!</span>}
       <br />
       <br />
-      <button
-        data-testid="start-recipe-btn"
-        className="btn-start"
-        onClick={ () => btnStart() }
-      >
-        Start Recipe
-      </button>
+      { startOn && (
+        <button
+          data-testid="start-recipe-btn"
+          className="btn-start"
+          onClick={ () => btnStart() }
+        >
+          { startBtn ? 'Start Recipe' : 'Continue Recipe' }
+        </button>
+      ) }
     </div>
   );
 }

@@ -30,7 +30,6 @@ function SearchBarProvider({ children }) {
     setLastFilter,
     specificFood,
     setSpecificFood,
-
   }), [
     radioInput,
     inputValue,

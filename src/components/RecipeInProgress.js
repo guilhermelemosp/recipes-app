@@ -7,6 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
+import './label.css';
 
 function RecipeInProgress() {
   const [specificFood, setSpecificFood] = useState([]);
@@ -19,12 +20,12 @@ function RecipeInProgress() {
   const drink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const url = (pathname.includes('meals')) ? meals : drink;
   const today = new Date();
-  // const [checkbox, setCheckbox] = useState(false);
   const [copied, setCopied] = useState(false);
   const [arrayFav, setArrayFav] = useState([]);
   const [heart, setHeart] = useState(false);
   const [disable, setDisable] = useState(true);
   const { fetchFood } = useFetch(setSpecificFood, url);
+  const [checkboxes, setCheckboxes] = useState([]);
 
   useEffect(() => {
     fetchFood();
@@ -42,14 +43,23 @@ function RecipeInProgress() {
 
   const checkboxBtn = () => {
     const boxes = document.querySelectorAll('.box');
-    localStorage.setItem('inProgressRecipes', boxes
-      .forEach((checkbox) => checkbox.checked));
     if ([...boxes].every((checkbox) => checkbox.checked)) {
       setDisable(false);
     } else {
       setDisable(true);
     }
   };
+
+  const saveCheckbox = (param) => {
+    if (checkboxes.includes(param)) {
+      const filter = checkboxes.filter((checkbox) => checkbox !== param);
+      setCheckboxes(filter);
+    } else {
+      setCheckboxes([...checkboxes, param]);
+    }
+  };
+
+  const verifyCheck = (param) => checkboxes.some((checkbox) => checkbox === param);
 
   const getSavedRecipes = () => {
     const savedRecipes = localStorage.getItem('doneRecipes');
@@ -158,13 +168,14 @@ function RecipeInProgress() {
               <label
                 data-testid={ `${index}-ingredient-step` }
                 htmlFor={ `ingredient-${index}` }
+                className={ verifyCheck(`${index}-${qntt}`) && 'label-through' }
               >
                 <input
                   data-testid={ `${index}-ingredient-box` }
                   className="box"
                   type="checkbox"
                   id={ `ingredient-${index}` }
-                  onChange={ checkboxBtn }
+                  onChange={ () => { checkboxBtn(); saveCheckbox(`${index}-${qntt}`); } }
                 />
                 { `${qntt} ${ingredient.results[index]}` }
               </label>

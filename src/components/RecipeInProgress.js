@@ -168,7 +168,7 @@ function RecipeInProgress() {
               <label
                 data-testid={ `${index}-ingredient-step` }
                 htmlFor={ `ingredient-${index}` }
-                className={ verifyCheck(`${index}-${qntt}`) && 'label-through' }
+                className={ verifyCheck(`${index}-${qntt}`) ? 'label-through' : '' }
               >
                 <input
                   data-testid={ `${index}-ingredient-box` }

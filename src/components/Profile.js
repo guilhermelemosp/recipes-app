@@ -1,0 +1,47 @@
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+
+export default function ProfileComponent() {
+  const history = useHistory();
+  const localEmail = () => {
+    if (localStorage.getItem('user')) {
+      const { email } = JSON.parse(localStorage.getItem('user'));
+      return email;
+    }
+    return '';
+  };
+
+  return (
+    <div>
+      <div>
+        <h3
+          data-testid="profile-email"
+        >
+          {localEmail()}
+
+        </h3>
+        <button
+          type="button"
+          data-testid="profile-done-btn"
+          onClick={ () => history.push('/done-recipes') }
+        >
+          Done Recipes
+        </button>
+        <button
+          type="button"
+          data-testid="profile-favorite-btn"
+        //   onClick=
+        >
+          Favorite Recipes
+        </button>
+        <button
+          type="button"
+          data-testid="profile-logout-btn"
+        //   onClick={ }
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  );
+}

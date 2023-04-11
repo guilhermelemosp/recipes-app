@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import clipboardCopy from 'clipboard-copy';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
 import shareIcon from '../images/shareIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+import { removeFav } from '../services/favoriteSave';
 
-export default function DoneRecipes() {
+function FavoriteRecipes() {
   const getSavedRecipes = () => {
-    const savedRecipes = localStorage.getItem('doneRecipes');
-    console.log(savedRecipes);
+    const savedRecipes = localStorage.getItem('favoriteRecipes');
     return savedRecipes ? JSON.parse(savedRecipes) : [];
   };
 
@@ -19,10 +19,6 @@ export default function DoneRecipes() {
     setCopied(true);
     setIdCopied(id);
   };
-  const renderTags = (i, tagName) => (
-    <div data-testid={ `${i}-${tagName}-horizontal-tag` }>
-      { tagName }
-    </div>);
 
   const [recipes, setRecipes] = useState(getSavedRecipes());
 
@@ -32,9 +28,14 @@ export default function DoneRecipes() {
     setRecipes(filtered);
   };
 
+  const saveFavBtn = (id) => {
+    removeFav(id);
+    console.log(recipes);
+    setRecipes(getSavedRecipes());
+  };
+
   return (
     <div>
-      <Header isRender={ false } namePage="Done Recipes" />
       <div>
         <button
           data-testid="filter-by-all-btn"
@@ -85,8 +86,6 @@ export default function DoneRecipes() {
             <div data-testid={ `${i}-horizontal-done-date` }>
               { recipe.doneDate }
             </div>
-            { recipe.tags[0] && renderTags(i, recipe.tags[0])}
-            { recipe.tags[1] && renderTags(i, recipe.tags[1])}
             <div>
               <button
                 onClick={ () => shareBtn(recipe.id, recipe.type) }
@@ -95,6 +94,15 @@ export default function DoneRecipes() {
                   data-testid={ `${i}-horizontal-share-btn` }
                   src={ shareIcon }
                   alt="shareIcon.svg"
+                />
+              </button>
+              <button
+                onClick={ () => saveFavBtn(recipe.id) }
+              >
+                <img
+                  data-testid={ `${i}-horizontal-favorite-btn` }
+                  src={ blackHeartIcon }
+                  alt="blackHeartIcon.svg"
                 />
               </button>
               <div>
@@ -107,3 +115,5 @@ export default function DoneRecipes() {
     </div>
   );
 }
+
+export default FavoriteRecipes;

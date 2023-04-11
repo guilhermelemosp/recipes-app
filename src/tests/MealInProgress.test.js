@@ -15,7 +15,7 @@ const mockFetch = () => {
     }));
 };
 
-describe('Testando page RecipeInProgress de um Drink do App Receitas', () => {
+describe('Testando page RecipeInProgress de um Meal do App Receitas', () => {
   beforeEach(mockFetch);
   const { reload } = window.location;
 

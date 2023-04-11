@@ -49,7 +49,6 @@ function RecipeInProgress() {
     } else {
       setDisable(true);
     }
-    console.log(disable);
   };
 
   const getSavedRecipes = () => {
@@ -165,7 +164,7 @@ function RecipeInProgress() {
                   className="box"
                   type="checkbox"
                   id={ `ingredient-${index}` }
-                  onChange={ () => checkboxBtn() }
+                  onChange={ checkboxBtn }
                 />
                 { `${qntt} ${ingredient.results[index]}` }
               </label>

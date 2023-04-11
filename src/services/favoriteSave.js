@@ -36,3 +36,8 @@ export const removeFavM = (fav) => {
   const favorite = readFavorite();
   saveFavorite(favorite.filter((s) => s.id !== fav[0].idMeal));
 };
+
+export const removeFav = (fav) => {
+  const favorite = readFavorite();
+  saveFavorite(favorite.filter((s) => s.id !== fav));
+};

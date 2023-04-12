@@ -70,7 +70,7 @@ describe('Testando page RecipeInProgress de um Drink do App Receitas', () => {
     await act(async () => userEvent.click(shareBtn));
     await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(favoriteBtn));
-    await act(async () => userEvent.click(favoriteBtn));
+    // await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(finishBtn));
     window.location.reload();
     expect(window.location.reload).toHaveBeenCalledTimes(1);

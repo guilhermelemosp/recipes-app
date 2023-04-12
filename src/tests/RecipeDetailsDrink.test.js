@@ -91,7 +91,7 @@ describe('Testando RecipeDetails', () => {
     await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(favoriteBtn));
-    await act(async () => userEvent.click(favoriteBtn));
+    // await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(startBtn));
   });
 });

@@ -3,9 +3,7 @@ const getSavedRecipes = () => {
   return savedRecipes ? JSON.parse(savedRecipes) : [];
 };
 
-const today = new Date();
-
-export const savesRecipes = () => {
+export const savesRecipes = (specificFood, today) => {
   const re = /\s*,\s*/;
   const storageRecipes = getSavedRecipes();
   const saveRecipes = [...storageRecipes, {

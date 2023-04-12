@@ -25,7 +25,7 @@ function FavoriteRecipes() {
 
   const saveFavBtn = (id) => {
     removeFav(id);
-    setRecipes(getSavedRecipes());
+    setRecipes(getFavorite());
   };
 
   return (
@@ -33,7 +33,7 @@ function FavoriteRecipes() {
       <div>
         <button
           data-testid="filter-by-all-btn"
-          onClick={ () => setRecipes(getSavedRecipes()) }
+          onClick={ () => setRecipes(getFavorite()) }
         >
           All
         </button>

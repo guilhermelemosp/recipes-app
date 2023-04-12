@@ -71,23 +71,8 @@ describe('Testando page RecipeInProgress de um Drink do App Receitas', () => {
     await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(favoriteBtn));
-
-    // await waitFor(() => expect(copy).toBeInTheDocument());
-
     await act(async () => userEvent.click(finishBtn));
     window.location.reload();
     expect(window.location.reload).toHaveBeenCalledTimes(1);
-    // await act(async () => userEvent.click(breakfastBtn));
-    // await act(async () => userEvent.click(allBtn));
-
-    // const searchTopBtn = screen.getByTestId('search-top-btn');
-    // userEvent.click(searchTopBtn);
-    // const searchInput = screen.queryByTestId('search-input');
-    // userEvent.type(searchInput, 'hhhhh');
-    // const firstLetter = screen.getByTestId('name-search-radio');
-    // userEvent.click(firstLetter);
-    // const execBtn = screen.getByTestId('exec-search-btn');
-    // expect(execBtn).toBeInTheDocument();
-    // userEvent.click(execBtn);
   });
 });

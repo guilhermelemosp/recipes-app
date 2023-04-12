@@ -8,6 +8,7 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
 import './label.css';
+import { savesRecipes } from '../services/recipeLocalStorage';
 
 function RecipeInProgress() {
   const [specificFood, setSpecificFood] = useState([]);
@@ -19,7 +20,6 @@ function RecipeInProgress() {
   const meals = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   const drink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
   const url = (pathname.includes('meals')) ? meals : drink;
-  const today = new Date();
   const [copied, setCopied] = useState(false);
   const [arrayFav, setArrayFav] = useState([]);
   const [heart, setHeart] = useState(false);
@@ -61,29 +61,6 @@ function RecipeInProgress() {
 
   const verifyCheck = (param) => checkboxes.some((checkbox) => checkbox === param);
 
-  const getSavedRecipes = () => {
-    const savedRecipes = localStorage.getItem('doneRecipes');
-    return savedRecipes ? JSON.parse(savedRecipes) : [];
-  };
-
-  const savesRecipes = () => {
-    const re = /\s*,\s*/;
-    const storageRecipes = getSavedRecipes();
-    const saveRecipes = [...storageRecipes, {
-      id: specificFood[0].idMeal || specificFood[0].idDrink,
-      nationality: specificFood[0].strArea ? specificFood[0].strArea : '',
-      name: specificFood[0].strMeal || specificFood[0].strDrink,
-      category: specificFood[0].strCategory,
-      image: specificFood[0].strMealThumb || specificFood[0].strDrinkThumb,
-      tags: specificFood[0].strTags ? (specificFood[0].strTags).split(re) : [],
-      alcoholicOrNot: specificFood[0].strAlcoholic ? specificFood[0].strAlcoholic : '',
-      type: !specificFood[0].strYoutube ? 'drink' : 'meal',
-      doneDate: today.toISOString(),
-    }];
-    localStorage.setItem('doneRecipes', JSON.stringify(saveRecipes));
-    console.log(localStorage.getItem('doneRecipes'));
-  };
-
   const favOnOff = () => {
     if (pathname.includes('drinks')) {
       if (arrayFav.some((fav) => (fav
@@ -113,7 +90,6 @@ function RecipeInProgress() {
       if ((JSON.parse(localStorage.getItem('favoriteRecipes'))).some((fav) => (fav
         .id === id))) {
         setHeart(true);
-        console.log(heart);
       } else {
         setHeart(false);
       }
@@ -132,16 +108,15 @@ function RecipeInProgress() {
     favOnOff();
     const arrayFav2 = getFavorite();
     setArrayFav(arrayFav2);
-    console.log(arrayFav);
   };
 
   const shareBtn = () => {
-    clipboardCopy((window.location.href).replaceAll('/in-progress', ''));
     setCopied(true);
+    clipboardCopy((window.location.href).replaceAll('/in-progress', ''));
   };
 
   const btnFinish = () => {
-    savesRecipes();
+    savesRecipes(specificFood);
     history.push('/done-recipes');
   };
 

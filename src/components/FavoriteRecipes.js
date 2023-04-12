@@ -3,14 +3,9 @@ import clipboardCopy from 'clipboard-copy';
 import { Link } from 'react-router-dom';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
-import { removeFav } from '../services/favoriteSave';
+import { getFavorite, removeFav } from '../services/favoriteSave';
 
 function FavoriteRecipes() {
-  const getSavedRecipes = () => {
-    const savedRecipes = localStorage.getItem('favoriteRecipes');
-    return savedRecipes ? JSON.parse(savedRecipes) : [];
-  };
-
   const [copied, setCopied] = useState(false);
   const [idCopied, setIdCopied] = useState(0);
 
@@ -20,17 +15,16 @@ function FavoriteRecipes() {
     setIdCopied(id);
   };
 
-  const [recipes, setRecipes] = useState(getSavedRecipes());
+  const [recipes, setRecipes] = useState(getFavorite());
 
   const filterRecipes = (type) => {
-    const savedRecipes = getSavedRecipes();
+    const savedRecipes = getFavorite();
     const filtered = savedRecipes.filter((recipe) => recipe.type === type);
     setRecipes(filtered);
   };
 
   const saveFavBtn = (id) => {
     removeFav(id);
-    console.log(recipes);
     setRecipes(getSavedRecipes());
   };
 
@@ -58,7 +52,7 @@ function FavoriteRecipes() {
         </button>
       </div>
       <div>
-        { recipes.map((recipe, i) => (
+        { recipes?.map((recipe, i) => (
           <div key={ i }>
             <div>
               <Link to={ `/${recipe.type}s/${recipe.id}` }>

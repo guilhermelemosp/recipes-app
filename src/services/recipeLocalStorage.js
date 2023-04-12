@@ -19,3 +19,11 @@ export const savesRecipes = (specificFood, today) => {
   }];
   localStorage.setItem('doneRecipes', JSON.stringify(saveRecipes));
 };
+
+export const localEmail = () => {
+  if (localStorage.getItem('user')) {
+    const { email } = JSON.parse(localStorage.getItem('user'));
+    return email;
+  }
+  return '';
+};

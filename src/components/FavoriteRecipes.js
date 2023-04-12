@@ -10,9 +10,9 @@ function FavoriteRecipes() {
   const [idCopied, setIdCopied] = useState(0);
 
   const shareBtn = (id, type) => {
-    clipboardCopy(`http://localhost:3000/${type}s/${id}`);
     setCopied(true);
     setIdCopied(id);
+    clipboardCopy(`http://localhost:3000/${type}s/${id}`);
   };
 
   const [recipes, setRecipes] = useState(getFavorite());

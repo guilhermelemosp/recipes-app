@@ -105,6 +105,7 @@ describe('Testando page RecipeInProgress de um Meal do App Receitas', () => {
     await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(favoriteBtn));
     await act(async () => userEvent.click(favoriteBtn));
+    await act(async () => userEvent.click(favoriteBtn));
 
     // await waitFor(() => expect(copy).toBeInTheDocument());
 

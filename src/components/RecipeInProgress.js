@@ -7,7 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
-import { savesRecipes} from '../services/recipeLocalStorage';
+import { savesRecipes } from '../services/recipeLocalStorage';
 
 import './label.css';
 

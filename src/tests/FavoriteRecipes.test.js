@@ -77,4 +77,29 @@ describe('Testando DoneRecipes', () => {
     const filterByMealBtn = screen.getByTestId('filter-by-meal-btn');
     await act(async () => userEvent.click(filterByMealBtn));
   });
+
+  test('o funcionamento da page RecipeInProgress', async () => {
+    await act(async () => {
+      renderWithRouter(<App />, '/drinks/15997/in-progress');
+    });
+
+    const inputBox = screen.getByTestId('0-ingredient-box');
+    const favoriteBtn = screen.getByTestId('favorite-btn');
+    const finishBtn = screen.getByTestId('finish-recipe-btn');
+
+    await act(async () => userEvent.click(inputBox));
+    await act(async () => userEvent.click(inputBox));
+    await act(async () => userEvent.click(inputBox));
+
+    expect(finishBtn).not.toBeDisabled();
+
+    await act(async () => userEvent.click(favoriteBtn));
+    await act(async () => userEvent.click(finishBtn));
+
+    const profileBtn = screen.getByTestId('profile-top-btn');
+    await act(async () => userEvent.click(profileBtn));
+
+    const profileFavBtn = screen.getByTestId('profile-favorite-btn');
+    await act(async () => userEvent.click(profileFavBtn));
+  });
 });

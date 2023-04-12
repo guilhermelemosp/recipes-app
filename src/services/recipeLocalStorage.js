@@ -5,7 +5,7 @@ const getSavedRecipes = () => {
 
 const today = new Date();
 
-export const savesRecipes = (specificFood) => {
+export const savesRecipes = () => {
   const re = /\s*,\s*/;
   const storageRecipes = getSavedRecipes();
   const saveRecipes = [...storageRecipes, {

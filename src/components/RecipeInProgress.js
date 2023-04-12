@@ -8,7 +8,6 @@ import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import { addFav, getFavorite, removeFavD, removeFavM } from '../services/favoriteSave';
 import './label.css';
-import { savesRecipes } from '../services/recipeLocalStorage';
 
 function RecipeInProgress() {
   const [specificFood, setSpecificFood] = useState([]);
@@ -60,6 +59,30 @@ function RecipeInProgress() {
   };
 
   const verifyCheck = (param) => checkboxes.some((checkbox) => checkbox === param);
+
+  const getSavedRecipes = () => {
+    const savedRecipes = localStorage.getItem('doneRecipes');
+    return savedRecipes ? JSON.parse(savedRecipes) : [];
+  };
+
+  const today = new Date();
+
+  const savesRecipes = () => {
+    const re = /\s*,\s*/;
+    const storageRecipes = getSavedRecipes();
+    const saveRecipes = [...storageRecipes, {
+      id: specificFood[0].idMeal || specificFood[0].idDrink,
+      nationality: specificFood[0].strArea ? specificFood[0].strArea : '',
+      name: specificFood[0].strMeal || specificFood[0].strDrink,
+      category: specificFood[0].strCategory,
+      image: specificFood[0].strMealThumb || specificFood[0].strDrinkThumb,
+      tags: specificFood[0].strTags ? (specificFood[0].strTags).split(re) : [],
+      alcoholicOrNot: specificFood[0].strAlcoholic ? specificFood[0].strAlcoholic : '',
+      type: !specificFood[0].strYoutube ? 'drink' : 'meal',
+      doneDate: today.toISOString(),
+    }];
+    localStorage.setItem('doneRecipes', JSON.stringify(saveRecipes));
+  };
 
   const favOnOff = () => {
     if (pathname.includes('drinks')) {
@@ -116,7 +139,7 @@ function RecipeInProgress() {
   };
 
   const btnFinish = () => {
-    savesRecipes(specificFood);
+    savesRecipes();
     history.push('/done-recipes');
   };
 

@@ -13,7 +13,6 @@ export const getFavorite = () => {
 export const addFav = (fav) => {
   if (fav) {
     const favoriteSongs = readFavorite();
-    console.log(fav);
     saveFavorite([...favoriteSongs, {
       id: fav[0].idMeal || fav[0].idDrink,
       type: !fav[0].strYoutube ? 'drink' : 'meal',
@@ -23,7 +22,6 @@ export const addFav = (fav) => {
       name: fav[0].strMeal || fav[0].strDrink,
       image: fav[0].strMealThumb || fav[0].strDrinkThumb,
     }]);
-    console.log(readFavorite());
   }
 };
 

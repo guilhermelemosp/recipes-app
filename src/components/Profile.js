@@ -1,16 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { localEmail } from '../services/recipeLocalStorage';
 
 export default function ProfileComponent() {
   const history = useHistory();
-  const localEmail = () => {
-    if (localStorage.getItem('user')) {
-      const { email } = JSON.parse(localStorage.getItem('user'));
-      return email;
-    }
-    return '';
-  };
-
   const logOut = () => {
     localStorage.clear();
     history.push('/');

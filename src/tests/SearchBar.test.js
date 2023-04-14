@@ -62,7 +62,6 @@ describe('Testando SearchBar App Receitas', () => {
     const name = screen.getByTestId('name-search-radio');
     userEvent.click(name);
     userEvent.click(execBtn);
-    await waitFor(() => console.log(history.location.pathname));
     await waitFor(() => expect(history.location.pathname).toBe('/drinks/17222'));
 
     // const cardImg = screen.getByTestId('0-card-img');

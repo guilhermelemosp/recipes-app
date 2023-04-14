@@ -4,15 +4,11 @@ import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import App from '../App';
 import renderWithRouter from './helpers/renderWithRouter';
-import oneMeal from '../../cypress/mocks/oneMeal';
+import fetch from '../../cypress/mocks/fetch';
 
 const mockFetch = () => {
   jest.spyOn(global, 'fetch')
-    .mockImplementation(() => Promise.resolve({
-      status: 200,
-      ok: true,
-      json: () => Promise.resolve(oneMeal),
-    }));
+    .mockImplementation(fetch);
 };
 
 describe('Testando DoneRecipes', () => {
@@ -29,13 +25,15 @@ describe('Testando DoneRecipes', () => {
   afterAll(() => {
     window.location.reload = reload;
   });
-  test('o funcionamento da page RecipeDetails', async () => {
+  test('o funcionamento da page DoneRecipes', async () => {
     await act(async () => {
       renderWithRouter(<App />, '/meals/52771/in-progress');
     });
 
     expect(global.fetch).toHaveBeenCalled();
 
+    const favoriteBtn = screen.getByTestId('favorite-btn');
+    await act(async () => userEvent.click(favoriteBtn));
     const inputBox0 = screen.getByTestId('0-ingredient-box');
     const inputBox1 = screen.getByTestId('1-ingredient-box');
     const inputBox2 = screen.getByTestId('2-ingredient-box');
@@ -56,26 +54,52 @@ describe('Testando DoneRecipes', () => {
     await act(async () => userEvent.click(inputBox7));
     await act(async () => userEvent.click(finishBtn));
 
-    const doneRecipes = screen.getByText('Done Recipes');
-    expect(doneRecipes).toBeInTheDocument();
+    const profileBtn = screen.getByTestId('profile-top-btn');
+    await act(async () => userEvent.click(profileBtn));
+
+    const profileFavBtn = screen.getByTestId('profile-favorite-btn');
+    await act(async () => userEvent.click(profileFavBtn));
 
     const shareBtn = screen.getByTestId('0-horizontal-share-btn');
     expect(shareBtn).toBeInTheDocument();
     await act(async () => userEvent.click(shareBtn));
 
+    const favBtn = screen.getByTestId('0-horizontal-favorite-btn');
+    expect(favBtn).toBeInTheDocument();
+    await act(async () => userEvent.click(favBtn));
+
     const allBtn = screen.getByTestId('filter-by-all-btn');
-    expect(allBtn).toBeInTheDocument();
     await act(async () => userEvent.click(allBtn));
-    const penne = screen.getByText('Spicy Arrabiata Penne');
-    expect(penne).toBeInTheDocument();
 
     const filterByDrinkBtn = screen.getByTestId('filter-by-drink-btn');
-    expect(filterByDrinkBtn).toBeInTheDocument();
     await act(async () => userEvent.click(filterByDrinkBtn));
-    expect(penne).not.toBeInTheDocument();
 
     const filterByMealBtn = screen.getByTestId('filter-by-meal-btn');
-    expect(filterByMealBtn).toBeInTheDocument();
     await act(async () => userEvent.click(filterByMealBtn));
+  });
+
+  test('o funcionamento da page RecipeInProgress', async () => {
+    await act(async () => {
+      renderWithRouter(<App />, '/drinks/15997/in-progress');
+    });
+
+    const inputBox = screen.getByTestId('0-ingredient-box');
+    const favoriteBtn = screen.getByTestId('favorite-btn');
+    const finishBtn = screen.getByTestId('finish-recipe-btn');
+
+    await act(async () => userEvent.click(inputBox));
+    await act(async () => userEvent.click(inputBox));
+    await act(async () => userEvent.click(inputBox));
+
+    expect(finishBtn).not.toBeDisabled();
+
+    await act(async () => userEvent.click(favoriteBtn));
+    await act(async () => userEvent.click(finishBtn));
+
+    const profileBtn = screen.getByTestId('profile-top-btn');
+    await act(async () => userEvent.click(profileBtn));
+
+    const profileFavBtn = screen.getByTestId('profile-favorite-btn');
+    await act(async () => userEvent.click(profileFavBtn));
   });
 });

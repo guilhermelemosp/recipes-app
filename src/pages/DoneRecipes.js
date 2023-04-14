@@ -7,7 +7,6 @@ import shareIcon from '../images/shareIcon.svg';
 export default function DoneRecipes() {
   const getSavedRecipes = () => {
     const savedRecipes = localStorage.getItem('doneRecipes');
-    console.log(savedRecipes);
     return savedRecipes ? JSON.parse(savedRecipes) : [];
   };
 

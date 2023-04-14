@@ -68,7 +68,6 @@ export default function RecipeDetails() {
       items: 2,
     },
   };
-  console.log(JSON.parse(localStorage.getItem('continueRecipes')));
   const btnStart = () => {
     addContinue(id);
     if (pathname.includes('meals')) {
@@ -141,12 +140,11 @@ export default function RecipeDetails() {
     favOnOff();
     const arrayFav2 = getFavorite();
     setArrayFav(arrayFav2);
-    console.log(arrayFav);
   };
 
   const shareBtn = () => {
-    clipboardCopy(window.location.href);
     setCopied(true);
+    clipboardCopy(window.location.href);
   };
 
   return (
@@ -181,7 +179,7 @@ export default function RecipeDetails() {
       ))}
       <Carousel responsive={ responsive } swipeable>
         { pathname.includes('meals')
-          ? recommendDrinks.slice(0, six).map((drinks, index) => (
+          ? recommendDrinks?.slice(0, six).map((drinks, index) => (
             <div key={ index } data-testid={ `${index}-recommendation-card` }>
               <img
                 src={ drinks.strDrinkThumb }
@@ -192,7 +190,7 @@ export default function RecipeDetails() {
                 {drinks.strDrink}
               </div>
             </div>
-          )) : recommendMeals.slice(0, six).map((meal, index) => (
+          )) : recommendMeals?.slice(0, six).map((meal, index) => (
             <div key={ index } data-testid={ `${index}-recommendation-card` }>
               <img
                 src={ meal.strMealThumb }
